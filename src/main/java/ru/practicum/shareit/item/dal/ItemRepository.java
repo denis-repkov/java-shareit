@@ -20,6 +20,6 @@ public interface ItemRepository {
 
     Set<Item> search(String text);
 
-    void remove(Integer id);
+    Item remove(Integer id);
 
 }

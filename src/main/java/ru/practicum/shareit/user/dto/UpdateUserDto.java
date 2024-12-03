@@ -12,7 +12,7 @@ public class UpdateUserDto {
     @Size(max = 100, message = "Имя пользователя не должно превышать 100 символов")
     private String name;
 
-    @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Эл.почта некорректна")
+    @Email(message = "Эл.почта некорректна")
     private String email;
 
 }

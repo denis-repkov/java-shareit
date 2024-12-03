@@ -16,7 +16,10 @@ import java.util.stream.Collectors;
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
 
+    private int idCounter = 0;
+
     private final Map<Integer, List<Item>> userItemIndex = new LinkedHashMap<>();
+
     private final Map<Integer, Item> itemStorage = new HashMap<>();
 
     @Override
@@ -41,6 +44,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item add(Item item) {
+        item.setId(getNextId());
         itemStorage.put(item.getId(), item);
         userItemIndex.computeIfAbsent(item.getOwner(), k -> new ArrayList<>()).add(item);
         return item;
@@ -75,7 +79,11 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public void remove(Integer id) {
-        itemStorage.remove(id);
+    public Item remove(Integer id) {
+        return itemStorage.remove(id);
+    }
+
+    private int getNextId() {
+        return ++idCounter;
     }
 }

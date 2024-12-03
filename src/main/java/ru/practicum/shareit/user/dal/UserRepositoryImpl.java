@@ -9,6 +9,8 @@ import java.util.Map;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
+    private int idCounter = 0;
+
     private final Map<Integer, User> userStorage = new HashMap<>();
 
     @Override
@@ -29,6 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User add(User newUser) {
+        newUser.setId(getNextId());
         userStorage.put(newUser.getId(), newUser);
         return newUser;
     }
@@ -40,7 +43,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void remove(Integer id) {
-        userStorage.remove(id);
+    public User remove(Integer id) {
+        return userStorage.remove(id);
+    }
+
+    private int getNextId() {
+        return ++idCounter;
     }
 }

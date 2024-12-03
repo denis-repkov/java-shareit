@@ -1,84 +1,24 @@
 package ru.practicum.shareit.item;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.AuthentificationException;
-import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dal.ItemRepository;
+import ru.practicum.shareit.item.dto.CreateItemDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.dal.UserRepository;
 
-import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 
-import static ru.practicum.shareit.exception.ErrorMessages.ITEM_NOT_FOUND;
-import static ru.practicum.shareit.exception.ErrorMessages.USER_NOT_FOUND;
+public interface ItemService {
+    Set<ItemDto> getByUser(Integer userId);
 
+    Set<Item> findAll();
 
-@Service
-@Slf4j
-@RequiredArgsConstructor
-public class ItemService {
+    ItemDto get(Integer itemId);
 
-    private static int idCounter = 0;
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
+    ItemDto add(CreateItemDto itemDto, Integer userId);
 
-    public Set<Item> getByUser(Integer userId) {
-        if (!userRepository.containsById(userId)) {
-            throw new NotFoundException(USER_NOT_FOUND + userId);
-        }
-        return itemRepository.findByUserId(userId);
-    }
+    ItemDto update(Integer requestor, Integer itemId, UpdateItemDto newItem);
 
-    public Set<Item> findAll() {
-        return itemRepository.findAll();
-    }
+    void remove(Integer itemId);
 
-    public Item get(Integer itemId) {
-        if (Boolean.FALSE.equals(itemRepository.contains(itemId))) {
-            throw new NotFoundException(ITEM_NOT_FOUND + itemId);
-        }
-        return itemRepository.find(itemId);
-    }
-
-    public Item add(Item item) {
-        Integer ownerId = item.getOwner();
-        if (!userRepository.containsById(ownerId)) {
-            throw new NotFoundException(USER_NOT_FOUND + ownerId);
-        }
-        item.setId(getCounter());
-        return itemRepository.add(item);
-    }
-
-    public Item update(Integer requestor, Integer itemId, Item newItem) {
-        if (!itemRepository.contains(itemId)) {
-            throw new NotFoundException(ITEM_NOT_FOUND + itemId);
-        }
-        Item updatedItem = itemRepository.find(itemId);
-        if (!Objects.equals(updatedItem.getOwner(), requestor)) {
-            throw new AuthentificationException("Данные по товару может обновлять только его владелец");
-        }
-        return itemRepository.update(newItem);
-    }
-
-    public void remove(Integer itemId) {
-        if (!itemRepository.contains(itemId)) {
-            throw new NotFoundException(ITEM_NOT_FOUND + itemId);
-        }
-        itemRepository.remove(itemId);
-    }
-
-    public Set<Item> search(String text) {
-        if (text.isBlank()) {
-            return Collections.emptySet();
-        }
-        return itemRepository.search(text);
-    }
-
-    private synchronized int getCounter() {
-        return ++idCounter;
-    }
+    Set<ItemDto> search(String text);
 }

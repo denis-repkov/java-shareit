@@ -15,7 +15,7 @@ public class CreateUserDto {
     private String name;
 
     @NotBlank(message = "Эл.почта пользователя не должна быть пустой")
-    @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Эл.почта некорректна")
+    @Email(message = "Эл.почта некорректна")
     private String email;
 
 }
