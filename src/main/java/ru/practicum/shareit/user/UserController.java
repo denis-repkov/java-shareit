@@ -18,21 +18,21 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@Valid @RequestBody CreateUserDto user) {
-        return userService.create(user);
+        return userService.save(user);
     }
 
     @GetMapping("/{userId}")
-    public UserDto get(@PathVariable int userId) {
-        return userService.get(userId);
+    public UserDto get(@PathVariable Long userId) {
+        return userService.findById(userId);
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable Integer userId, @Valid @RequestBody UpdateUserDto userDto) {
+    public UserDto update(@PathVariable Long userId, @Valid @RequestBody UpdateUserDto userDto) {
         return userService.update(userId, userDto);
     }
 
     @DeleteMapping("/{userId}")
-    public void remove(@PathVariable Integer userId) {
-        userService.remove(userId);
+    public void delete(@PathVariable Long userId) {
+        userService.deleteById(userId);
     }
 }

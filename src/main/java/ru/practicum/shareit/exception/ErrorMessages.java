@@ -8,4 +8,6 @@ public final class ErrorMessages {
 
     public static final String USER_NOT_FOUND = "Не найден пользователь с ID: ";
 
+    public static final String BOOKING_NOT_FOUND = "Не найдено бронирование с ID:";
+
 }

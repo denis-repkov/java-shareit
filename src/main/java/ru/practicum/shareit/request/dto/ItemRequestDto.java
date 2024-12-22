@@ -14,10 +14,10 @@ import java.time.LocalDate;
 public class ItemRequestDto {
 
     @NotNull
-    private Integer id;
+    private Long id;
 
     @NotNull
-    private Integer requestor;
+    private Long requester;
 
     @NotNull
     @Future
@@ -25,6 +25,6 @@ public class ItemRequestDto {
 
     @NotBlank(message = "Описание запроса не может быть пустым")
     @Size(max = 500, message = "Описание запроса не должно превышать 500 символов")
-    private String desciption;
+    private String description;
 
 }

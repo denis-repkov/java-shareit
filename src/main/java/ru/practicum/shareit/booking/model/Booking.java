@@ -1,36 +1,41 @@
 package ru.practicum.shareit.booking.model;
 
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-
-@Data
+@Getter
+@Setter
+@Entity
+@Table(name = "bookings", schema = "public")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
 
-    @NotNull
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotNull
-    private Integer item;
+    @ManyToOne
+    @JoinColumn(name = "item")
+    private Item item;
 
-    @NotNull
-    private Integer booker;
+    @ManyToOne
+    @JoinColumn(name = "booker")
+    private User booker;
 
-    @NotNull
-    @Future
-    private LocalDate start;
+    @Column(name = "start_date")
+    private LocalDateTime start;
 
-    @NotNull
-    @Future
-    private LocalDate end;
+    @Column(name = "end_date")
+    private LocalDateTime end;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
 }

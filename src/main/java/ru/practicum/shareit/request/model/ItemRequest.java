@@ -1,31 +1,30 @@
 package ru.practicum.shareit.request.model;
 
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Entity
+@Table(name = "item_requests", schema = "public")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemRequest {
 
-    @NotNull
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotNull
-    private Integer requestor;
+    private Long requester;
 
-    @NotNull
-    @Future
     private LocalDate created;
 
-    @NotBlank(message = "Описание запроса не может быть пустым")
-    @Size(max = 500, message = "Описание запроса не должно превышать 500 символов")
-    private String desciption;
+    private String description;
 
 }

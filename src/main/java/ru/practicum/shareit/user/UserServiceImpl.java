@@ -21,46 +21,28 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDto create(CreateUserDto userDto) {
+    public UserDto save(CreateUserDto userDto) {
         User user = userMapper.map(userDto);
-        if (userRepository.containsByEmail(user.getEmail())) {
-            throw new ValidationException("Указанный адрес эл.почты уже занят другим пользователем");
-        }
-        return userMapper.map(userRepository.add(user));
+        User savedUser = userRepository.save(user);
+        return userMapper.map(savedUser);
     }
 
     @Override
-    public UserDto get(int id) {
-        if (!userRepository.containsById(id)) {
-            throw new NotFoundException(USER_NOT_FOUND + id);
-        }
-        return userMapper.map(userRepository.find(id));
+    public UserDto findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        return userMapper.map(user);
     }
 
     @Override
-    public UserDto update(Integer userId, UpdateUserDto userDto) {
-        if (!userRepository.containsById(userId)) {
-            throw new NotFoundException(USER_NOT_FOUND + userId);
-        }
-        if (userRepository.containsByEmail(userDto.getEmail())) {
-            throw new ValidationException("Указанный адрес эл.почты уже занят другим пользователем");
-        }
-        User updatedUser = userRepository.find(userId);
-        if (userDto.getName() != null && !userDto.getName().isBlank()) {
-            updatedUser.setName(userDto.getName());
-        }
-
-        if (userDto.getEmail() != null && !userDto.getEmail().isBlank()) {
-            updatedUser.setEmail(userDto.getEmail());
-        }
+    public UserDto update(Long userId, UpdateUserDto userDto) {
+        User currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND + userId));
+        User user = userMapper.map(userDto, userId, currentUser);
+        User updatedUser = userRepository.save(user);
         return userMapper.map(updatedUser);
     }
 
     @Override
-    public void remove(Integer id) {
-        User user = userRepository.remove(id);
-        if (user == null) {
-            throw new NotFoundException(USER_NOT_FOUND + id);
-        }
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }
