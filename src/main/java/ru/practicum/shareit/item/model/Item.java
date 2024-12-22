@@ -21,7 +21,6 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "owner")
-
     private User owner;
 
     private String name;
