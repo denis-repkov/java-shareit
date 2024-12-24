@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dal.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
@@ -43,6 +44,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentMapper commentMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemDto> findByOwner(Long ownerId) {
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         List<Item> items = itemRepository.findByOwner(owner);
@@ -52,6 +54,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemDto> findAll(Long userId) {
         List<Item> items;
         if (userId != null) {
@@ -66,20 +69,24 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ItemDto findById(Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException(ITEM_NOT_FOUND + itemId));
         return itemMapper.map(item);
     }
 
     @Override
+    @Transactional(rollbackFor = {NotFoundException.class})
     public ItemDto save(Long ownerId, CreateItemDto itemDto) {
-        User owner = userRepository.findById(ownerId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND + ownerId));
-        Item item = itemMapper.map(itemDto, owner);
-        Item savedItem = itemRepository.save(item);
-        return itemMapper.map(savedItem);
+        return userRepository.findById(ownerId)
+                .map(owner -> itemMapper.map(itemDto, owner))
+                .map(itemRepository::save)
+                .map(itemMapper::map)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND + ownerId));
     }
 
     @Override
+    @Transactional(rollbackFor = {NotFoundException.class, AuthentificationException.class})
     public ItemDto save(Long ownerId, Long itemId, UpdateItemDto itemDto) {
         Item currentItem = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException(ITEM_NOT_FOUND + itemId));
         if (!currentItem.getOwner().getId().equals(ownerId)) {
@@ -95,6 +102,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = {NotFoundException.class})
     public void deleteById(Long itemId) {
         if (itemRepository.findById(itemId).isEmpty()) {
             throw new NotFoundException(ITEM_NOT_FOUND + itemId);
@@ -103,6 +111,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemDto> search(String text) {
         if (text.isBlank()) {
             return Collections.emptyList();
@@ -113,6 +122,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = {NotFoundException.class, WrongArgumentsException.class})
     public CommentDto commentItem(Long userId,
                                   Long itemId,
                                   CreateCommentDto commentDto) {
