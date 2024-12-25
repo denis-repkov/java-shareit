@@ -76,7 +76,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(rollbackFor = {NotFoundException.class})
+    @Transactional
     public ItemDto save(Long ownerId, CreateItemDto itemDto) {
         return userRepository.findById(ownerId)
                 .map(owner -> itemMapper.map(itemDto, owner))
@@ -86,7 +86,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(rollbackFor = {NotFoundException.class, AuthentificationException.class})
+    @Transactional
     public ItemDto save(Long ownerId, Long itemId, UpdateItemDto itemDto) {
         Item currentItem = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException(ITEM_NOT_FOUND + itemId));
         if (!currentItem.getOwner().getId().equals(ownerId)) {
@@ -102,7 +102,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(rollbackFor = {NotFoundException.class})
+    @Transactional
     public void deleteById(Long itemId) {
         if (itemRepository.findById(itemId).isEmpty()) {
             throw new NotFoundException(ITEM_NOT_FOUND + itemId);
@@ -122,7 +122,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(rollbackFor = {NotFoundException.class, WrongArgumentsException.class})
+    @Transactional
     public CommentDto commentItem(Long userId,
                                   Long itemId,
                                   CreateCommentDto commentDto) {

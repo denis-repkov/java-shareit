@@ -37,7 +37,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
 
     @Override
-    @Transactional(rollbackFor = {NotFoundException.class, WrongArgumentsException.class})
+    @Transactional
     public BookingDto save(CreateBookingDto dto, Long bookerId) {
         if (!dto.getStart().isBefore(dto.getEnd())) {
             throw new WrongArgumentsException("Дата начала бронирования должна предшествовать дате окончания");
@@ -57,7 +57,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional(rollbackFor = {NotFoundException.class, AuthentificationException.class})
+    @Transactional
     public BookingDto processBooking(Long userId, Long bookingId, Boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException(BOOKING_NOT_FOUND + bookingId));

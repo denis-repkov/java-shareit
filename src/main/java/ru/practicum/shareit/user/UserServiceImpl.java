@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackFor = {NotFoundException.class})
+    @Transactional
     public UserDto update(Long userId, UpdateUserDto userDto) {
         User currentUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND + userId));
         User user = userMapper.map(userDto, userId, currentUser);
