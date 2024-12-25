@@ -8,29 +8,29 @@ import ru.practicum.shareit.request.model.ItemRequest;
 @Component
 public class ItemRequestMapper {
 
-    ItemRequest map(CreateItemRequestDto dto, Integer requestor) {
+    public final ItemRequest map(CreateItemRequestDto dto) {
         return ItemRequest.builder()
-                .requestor(requestor)
+                .requester(dto.getRequester())
                 .created(dto.getCreated())
-                .desciption(dto.getDesciption())
+                .description(dto.getDescription())
                 .build();
     }
 
-    ItemRequest map(ItemRequestDto dto) {
+    public final ItemRequest map(ItemRequestDto dto) {
         return ItemRequest.builder()
                 .id(dto.getId())
-                .requestor(dto.getRequestor())
+                .requester(dto.getRequester())
                 .created(dto.getCreated())
-                .desciption(dto.getDesciption())
+                .description(dto.getDescription())
                 .build();
     }
 
     ItemRequestDto map(ItemRequest dto) {
         return ItemRequestDto.builder()
                 .id(dto.getId())
-                .requestor(dto.getRequestor())
+                .requester(dto.getRequester())
                 .created(dto.getCreated())
-                .desciption(dto.getDesciption())
+                .description(dto.getDescription())
                 .build();
     }
 }

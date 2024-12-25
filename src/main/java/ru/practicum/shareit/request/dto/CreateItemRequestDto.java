@@ -19,6 +19,9 @@ public class CreateItemRequestDto {
 
     @NotBlank(message = "Описание запроса не может быть пустым")
     @Size(max = 500, message = "Описание запроса не должно превышать 500 символов")
-    private String desciption;
+    private String description;
+
+    @NotNull
+    private Long requester;
 
 }
