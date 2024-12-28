@@ -260,6 +260,10 @@ class ItemServiceTest {
         ItemDto createdItemDto = itemService.save(user1.getId(), itemDto);
         assertNotNull(itemService.findById(createdItemDto.getId()));
 
+        NotFoundException f =
+                assertThrows(NotFoundException.class, () -> itemService.deleteById(999L, createdItemDto.getId()));
+        assertEquals("Не найден пользователь с ID: " + 999L, f.getMessage());
+
         itemService.deleteById(user1.getId(), createdItemDto.getId());
         NotFoundException n =
                 assertThrows(NotFoundException.class, () -> itemService.findById(createdItemDto.getId()));
@@ -276,6 +280,13 @@ class ItemServiceTest {
     @Test
     void searchBlank() {
         assertEquals(Collections.emptyList(), itemService.search(user1.getId(), " "));
+    }
+
+    @Test
+    void searchNotUser() {
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> itemService.search(999L, "Test"));
+        assertEquals("Не найден пользователь с ID: " + 999L, n.getMessage());
     }
 
     @Test
