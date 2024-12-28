@@ -198,7 +198,9 @@ class BookingServiceTest {
                 .build();
 
         BookingDto created = bookingService.save(toCreate, user2.getId());
-        assertThrows(AuthentificationException.class, () -> bookingService.findById(created.getId(), user3.getId()));
+        AuthentificationException a =
+                assertThrows(AuthentificationException.class, () -> bookingService.findById(created.getId(), user3.getId()));
+        assertEquals("Только заказчик и владелец товара могут просматривать бронирование", a.getMessage());
     }
 
     @Test

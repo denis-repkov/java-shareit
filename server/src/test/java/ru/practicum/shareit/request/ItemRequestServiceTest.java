@@ -178,6 +178,8 @@ class ItemRequestServiceTest {
         itemRequestService.delete(created1.getId());
         assertEquals(1, itemRequestService.findAll(user3.getId()).size());
 
-        assertThrows(NotFoundException.class, () -> itemRequestService.findById(user3.getId(), created1.getId()));
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> itemRequestService.findById(user3.getId(), created1.getId()));
+        assertEquals("Не найден запрос с ID: " + created1.getId(), n.getMessage());
     }
 }

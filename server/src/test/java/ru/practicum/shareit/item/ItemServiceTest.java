@@ -127,7 +127,9 @@ class ItemServiceTest {
                 .available(true)
                 .build();
 
-        assertThrows(NotFoundException.class, () -> itemService.save(999L, toCreate));
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> itemService.save(999L, toCreate));
+        assertEquals("Не найден пользователь с ID: " + 999L, n.getMessage());
     }
 
     @Test
@@ -169,7 +171,9 @@ class ItemServiceTest {
                 .build();
 
         ItemDto createdItemDto = itemService.save(user1.getId(), itemDto);
-        assertThrows(AuthentificationException.class, () -> itemService.save(user2.getId(), createdItemDto.getId(), toUpdate));
+        AuthentificationException a =
+                assertThrows(AuthentificationException.class, () -> itemService.save(user2.getId(), createdItemDto.getId(), toUpdate));
+        assertEquals("Данные по товару может обновлять только его владелец", a.getMessage());
     }
 
     @Test
@@ -187,7 +191,9 @@ class ItemServiceTest {
                 .build();
 
         ItemDto createdItemDto = itemService.save(user1.getId(), itemDto);
-        assertThrows(AuthentificationException.class, () -> itemService.save(999L, createdItemDto.getId(), toUpdate));
+        AuthentificationException a =
+                assertThrows(AuthentificationException.class, () -> itemService.save(999L, createdItemDto.getId(), toUpdate));
+        assertEquals("Данные по товару может обновлять только его владелец", a.getMessage());
     }
 
     @Test
@@ -238,7 +244,9 @@ class ItemServiceTest {
         assertEquals(item1.getName(), foundItem.getName());
         assertEquals(item1.getAvailable(), foundItem.getAvailable());
         assertEquals(item1.getDescription(), foundItem.getDescription());
-        assertThrows(NotFoundException.class, () -> itemService.findById(999L));
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> itemService.findById(999L));
+        assertEquals("Не найден товар с ID: " + 999L, n.getMessage());
     }
 
     @Test
@@ -253,12 +261,16 @@ class ItemServiceTest {
         assertNotNull(itemService.findById(createdItemDto.getId()));
 
         itemService.deleteById(user1.getId(), createdItemDto.getId());
-        assertThrows(NotFoundException.class, () -> itemService.findById(createdItemDto.getId()));
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> itemService.findById(createdItemDto.getId()));
+        assertEquals("Не найден товар с ID: " + createdItemDto.getId(), n.getMessage());
     }
 
     @Test
     void deleteNotExistingItem() {
-        assertThrows(NotFoundException.class, () -> itemService.deleteById(user1.getId(), 999L));
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> itemService.deleteById(user1.getId(), 999L));
+        assertEquals("Не найден товар с ID: " + 999L, n.getMessage());
     }
 
     @Test
@@ -316,8 +328,9 @@ class ItemServiceTest {
         CreateCommentDto commentDto = CreateCommentDto.builder()
                 .text("Good comment")
                 .build();
-
-        assertThrows(NotFoundException.class, () -> itemService.commentItem(user1.getId(), 999L, commentDto));
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> itemService.commentItem(user1.getId(), 999L, commentDto));
+        assertEquals("Не найден товар с ID: " + 999L, n.getMessage());
     }
 
     @Test
@@ -334,7 +347,8 @@ class ItemServiceTest {
         CreateCommentDto commentDto = CreateCommentDto.builder()
                 .text("Good comment")
                 .build();
-
-        assertThrows(WrongArgumentsException.class, () -> itemService.commentItem(user1.getId(), item1.getId(), commentDto));
+        WrongArgumentsException w =
+                assertThrows(WrongArgumentsException.class, () -> itemService.commentItem(user1.getId(), item1.getId(), commentDto));
+        assertEquals("Оставить комментарий может только тот, кто забронировал этот товар", w.getMessage());
     }
 }

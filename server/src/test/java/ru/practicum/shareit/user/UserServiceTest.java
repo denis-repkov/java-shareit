@@ -109,6 +109,8 @@ class UserServiceTest {
     @Test
     @DisplayName("Несуществующий пользователь не найден")
     void findByIdError() {
-        assertThrows(NotFoundException.class, () -> userService.findById(999L));
+        NotFoundException n =
+                assertThrows(NotFoundException.class, () -> userService.findById(999L));
+        assertEquals("Не найден пользователь с ID: " + 999L, n.getMessage());
     }
 }
