@@ -19,6 +19,7 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.mockito.Mockito.any;
@@ -58,12 +59,16 @@ public class BookingControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(bookingController).build();
 
         createDto = CreateBookingDto.builder()
+                .start(LocalDateTime.of(2024, 10, 1, 12, 0))
+                .end(LocalDateTime.of(2024, 10, 10, 12, 0))
                 .itemId(1L)
                 .build();
 
         resultDto = BookingDto.builder()
                 .id(1L)
                 .booker(User.builder().id(2L).build())
+                .start(LocalDateTime.of(2024, 10, 1, 12, 0))
+                .end(LocalDateTime.of(2024, 10, 10, 12, 0))
                 .item(Item.builder().id(1L).name("Test Item").build())
                 .status(BookingStatus.APPROVED)
                 .build();
@@ -83,6 +88,8 @@ public class BookingControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(resultDto.getId()))
                 .andExpect(jsonPath("$.booker.id").value(resultDto.getBooker().getId()))
+                .andExpect(jsonPath("$.start").value(resultDto.getStartFormatted()))
+                .andExpect(jsonPath("$.end").value(resultDto.getEndFormatted()))
                 .andExpect(jsonPath("$.status").value(resultDto.getStatus().name()))
                 .andExpect(jsonPath("$.item.id").value(resultDto.getItem().getId()))
                 .andExpect(jsonPath("$.item.name").value(resultDto.getItem().getName()));
@@ -115,6 +122,8 @@ public class BookingControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(resultDto.getId()))
                 .andExpect(jsonPath("$.booker.id").value(resultDto.getBooker().getId()))
+                .andExpect(jsonPath("$.start").value(resultDto.getStartFormatted()))
+                .andExpect(jsonPath("$.end").value(resultDto.getEndFormatted()))
                 .andExpect(jsonPath("$.status").value(resultDto.getStatus().name()))
                 .andExpect(jsonPath("$.item.id").value(resultDto.getItem().getId()))
                 .andExpect(jsonPath("$.item.name").value(resultDto.getItem().getName()));
@@ -133,6 +142,8 @@ public class BookingControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(resultDto.getId()))
                 .andExpect(jsonPath("$[0].booker.id").value(resultDto.getBooker().getId()))
+                .andExpect(jsonPath("$[0].start").value(resultDto.getStartFormatted()))
+                .andExpect(jsonPath("$[0].end").value(resultDto.getEndFormatted()))
                 .andExpect(jsonPath("$[0].status").value(resultDto.getStatus().name()))
                 .andExpect(jsonPath("$[0].item.id").value(resultDto.getItem().getId()))
                 .andExpect(jsonPath("$[0].item.name").value(resultDto.getItem().getName()));
@@ -151,6 +162,8 @@ public class BookingControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(resultDto.getId()))
                 .andExpect(jsonPath("$[0].booker.id").value(resultDto.getBooker().getId()))
+                .andExpect(jsonPath("$[0].start").value(resultDto.getStartFormatted()))
+                .andExpect(jsonPath("$[0].end").value(resultDto.getEndFormatted()))
                 .andExpect(jsonPath("$[0].status").value(resultDto.getStatus().name()))
                 .andExpect(jsonPath("$[0].item.id").value(resultDto.getItem().getId()))
                 .andExpect(jsonPath("$[0].item.name").value(resultDto.getItem().getName()));

@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.request.dto.CreateItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,6 +49,7 @@ class ItemRequestControllerTest {
                 .id(1L)
                 .description("Description")
                 .requester(1L)
+                .created(LocalDateTime.of(2024, 12, 27, 15, 15, 15))
                 .build();
 
         createDto = CreateItemRequestDto.builder()
@@ -68,7 +70,8 @@ class ItemRequestControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(requestDto.getId()))
                 .andExpect(jsonPath("$.description").value(requestDto.getDescription()))
-                .andExpect(jsonPath("$.requester").value(requestDto.getRequester()));
+                .andExpect(jsonPath("$.requester").value(requestDto.getRequester()))
+                .andExpect(jsonPath("$.created").value(requestDto.getCreated().toString()));
     }
 
     @Test
@@ -84,7 +87,8 @@ class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].id").value(requestDto.getId()))
                 .andExpect(jsonPath("$[0].description").value(requestDto.getDescription()))
-                .andExpect(jsonPath("$[0].requester").value(requestDto.getRequester()));
+                .andExpect(jsonPath("$[0].requester").value(requestDto.getRequester()))
+                .andExpect(jsonPath("$[0].created").value(requestDto.getCreated().toString()));
     }
 
     @Test
@@ -100,7 +104,8 @@ class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].id").value(requestDto.getId()))
                 .andExpect(jsonPath("$[0].description").value(requestDto.getDescription()))
-                .andExpect(jsonPath("$[0].requester").value(requestDto.getRequester()));
+                .andExpect(jsonPath("$[0].requester").value(requestDto.getRequester()))
+                .andExpect(jsonPath("$[0].created").value(requestDto.getCreated().toString()));
     }
 
     @Test
@@ -114,6 +119,7 @@ class ItemRequestControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(requestDto.getId()))
                 .andExpect(jsonPath("$.description").value(requestDto.getDescription()))
-                .andExpect(jsonPath("$.requester").value(requestDto.getRequester()));
+                .andExpect(jsonPath("$.requester").value(requestDto.getRequester()))
+                .andExpect(jsonPath("$.created").value(requestDto.getCreated().toString()));
     }
 }

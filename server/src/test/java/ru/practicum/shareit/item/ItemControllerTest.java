@@ -18,6 +18,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -97,6 +98,8 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$[0].description").value(itemDto.getDescription()))
                 .andExpect(jsonPath("$[0].available").value(itemDto.getAvailable()))
                 .andExpect(jsonPath("$[0].owner").value(itemDto.getOwner()))
+                .andExpect(jsonPath("$[0].lastBooking").value(itemDto.getLastBooking().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .andExpect(jsonPath("$[0].nextBooking").value(itemDto.getNextBooking().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .andExpect(jsonPath("$[0].comments[0]").value("Great item!"));
     }
 
@@ -114,6 +117,8 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.description").value(itemDto.getDescription()))
                 .andExpect(jsonPath("$.available").value(itemDto.getAvailable()))
                 .andExpect(jsonPath("$.owner").value(itemDto.getOwner()))
+                .andExpect(jsonPath("$.lastBooking").value(itemDto.getLastBooking().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .andExpect(jsonPath("$.nextBooking").value(itemDto.getNextBooking().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .andExpect(jsonPath("$.comments[0]").value("Great item!"));
     }
 
