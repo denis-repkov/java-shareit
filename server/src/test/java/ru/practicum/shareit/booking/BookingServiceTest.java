@@ -17,10 +17,10 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.exception.AuthentificationException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.WrongArgumentsException;
-import ru.practicum.shareit.item.ItemServiceImpl;
+import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.CreateItemDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.UserServiceImpl;
+import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -49,11 +49,11 @@ class BookingServiceTest {
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
-    private BookingServiceImpl bookingService;
+    private BookingService bookingService;
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
     @Autowired
-    private ItemServiceImpl itemService;
+    private ItemService itemService;
 
     @BeforeEach
     void setUp() {

@@ -35,7 +35,7 @@ class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Test
     void findByIdSuccess() {

@@ -14,7 +14,7 @@ import ru.practicum.shareit.request.dal.ItemRequestRepository;
 import ru.practicum.shareit.request.dto.CreateItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.user.UserServiceImpl;
+import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -38,7 +38,7 @@ class ItemRequestServiceTest {
     @Autowired
     private ItemRequestRepository itemRepository;
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
     @Autowired
     private ItemRequestService itemRequestService;
 
